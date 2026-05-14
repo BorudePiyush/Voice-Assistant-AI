@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Assist AI - Intelligent Voice Assistant</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <i class="fas fa-microphone-alt"></i>
+                <span>Voice Assist AI</span>
+            </div>
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#voice-chat" class="nav-link">Voice Chat</a>
+                <a href="#api-docs" class="nav-link">API Docs</a>
+                <a href="#status" class="nav-link">Status</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">Voice Assist AI</h1>
+            <p class="hero-subtitle">Intelligent Voice Assistant powered by Java & Spring Boot</p>
+            <div class="hero-features">
+                <div class="feature">
+                    <i class="fas fa-headphones"></i>
+                    <span>Real-time Voice</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-brain"></i>
+                    <span>AI Powered</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-bolt"></i>
+                    <span>Lightning Fast</span>
+                </div>
+            </div>
+            <button class="btn btn-primary" onclick="scrollToSection('voice-chat')">
+                <i class="fas fa-play"></i> Get Started
+            </button>
+        </div>
+        <div class="hero-visual">
+            <div class="mic-animation">
+                <div class="pulse"></div>
+                <div class="pulse"></div>
+                <div class="pulse"></div>
+                <i class="fas fa-microphone-alt"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- Voice Chat Section -->
+    <section id="voice-chat" class="voice-chat-section">
+        <div class="container">
+            <h2>Voice Chat Interface</h2>
+            
+            <div class="chat-container">
+                <!-- Chat Messages -->
+                <div class="messages-panel">
+                    <div id="messages" class="messages">
+                        <div class="message system">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Welcome! Start a conversation using text or WebSocket connection.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Controls -->
+                <div class="controls-panel">
+                    <!-- Text Input -->
+                    <div class="input-group">
+                        <input 
+                            type="text" 
+                            id="textInput" 
+                            class="text-input" 
+                            placeholder="Type your message or choose an option below..."
+                            onkeypress="handleKeyPress(event)"
+                        >
+                        <button class="btn-icon send-btn" onclick="sendTextMessage()" title="Send Message">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Actions -->
+                    <div class="quick-actions">
+                        <button class="btn-action" onclick="sendQuickMessage('Hello, Voice Assist!')">
+                            <i class="fas fa-handshake"></i> Hello
+                        </button>
+                        <button class="btn-action" onclick="sendQuickMessage('What is the weather today?')">
+                            <i class="fas fa-cloud-sun"></i> Weather
+                        </button>
+                        <button class="btn-action" onclick="sendQuickMessage('Turn on the lights')">
+                            <i class="fas fa-lightbulb"></i> Lights
+                        </button>
+                        <button class="btn-action" onclick="sendQuickMessage('Help me with tasks')">
+                            <i class="fas fa-tasks"></i> Tasks
+                        </button>
+                    </div>
+
+                    <!-- Connection Status -->
+                    <div class="connection-status">
+                        <div id="wsStatus" class="status-badge disconnected">
+                            <span class="status-dot"></span>
+                            <span id="wsStatusText">WebSocket Disconnected</span>
+                        </div>
+                        <button class="btn-icon" onclick="connectWebSocket()" title="Connect WebSocket">
+                            <i class="fas fa-plug"></i> Connect
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- API Documentation Section -->
+    <section id="api-docs" class="api-docs-section">
+        <div class="container">
+            <h2>API Documentation</h2>
+            
+            <div class="api-grid">
+                <!-- Health Endpoint -->
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint">/api/v1/health</span>
+                    </div>
+                    <p>Check application health status</p>
+                    <button class="btn-small" onclick="testEndpoint('/api/v1/health', 'GET')">
+                        Test
+                    </button>
+                </div>
+
+                <!-- Status Endpoint -->
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method get">GET</span>
+                        <span class="endpoint">/api/v1/status</span>
+                    </div>
+                    <p>Get application operational status</p>
+                    <button class="btn-small" onclick="testEndpoint('/api/v1/status', 'GET')">
+                        Test
+                    </button>
+                </div>
+
+                <!-- Voice Process Endpoint -->
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint">/api/v1/voice/process</span>
+                    </div>
+                    <p>Process voice input (text, audio, or command)</p>
+                    <button class="btn-small" onclick="testVoiceEndpoint()">
+                        Test
+                    </button>
+                </div>
+
+                <!-- Voice Recognize Endpoint -->
+                <div class="api-card">
+                    <div class="api-header">
+                        <span class="method post">POST</span>
+                        <span class="endpoint">/api/v1/voice/recognize</span>
+                    </div>
+                    <p>Recognize speech from audio input</p>
+                    <button class="btn-small" onclick="testRecognizeEndpoint()">
+                        Test
+                    </button>
+                </div>
+            </div>
+
+            <!-- Response Display -->
+            <div class="response-display">
+                <h3>API Response</h3>
+                <pre id="apiResponse" class="response-box">Response will appear here...</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Status Dashboard Section -->
+    <section id="status" class="status-section">
+        <div class="container">
+            <h2>System Status</h2>
+            
+            <div class="status-grid">
+                <!-- Server Status -->
+                <div class="status-card">
+                    <div class="status-icon success">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>Server</h3>
+                    <p id="serverStatus">Running on port 8080</p>
+                </div>
+
+                <!-- Database Status -->
+                <div class="status-card">
+                    <div class="status-icon success">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <h3>Database</h3>
+                    <p>Connected</p>
+                </div>
+
+                <!-- WebSocket Status -->
+                <div class="status-card">
+                    <div class="status-icon" id="wsStatusIcon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>WebSocket</h3>
+                    <p id="wsStatusDetail">Disconnected</p>
+                </div>
+
+                <!-- API Status -->
+                <div class="status-card">
+                    <div class="status-icon success">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3>API</h3>
+                    <p>Operational</p>
+                </div>
+            </div>
+
+            <!-- Real-time Stats -->
+            <div class="stats-container">
+                <div class="stat">
+                    <span class="stat-label">Messages Sent</span>
+                    <span class="stat-value" id="messageCount">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Session Time</span>
+                    <span class="stat-value" id="sessionTime">00:00</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Response Time</span>
+                    <span class="stat-value" id="responseTime">--ms</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 Voice Assist AI. All rights reserved.</p>
+            <div class="footer-links">
+                <a href="#" target="_blank">GitHub</a>
+                <a href="#" target="_blank">Documentation</a>
+                <a href="#" target="_blank">Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/app.js?v=2"></script>
+</body>
+</html>
