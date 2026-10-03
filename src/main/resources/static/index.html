@@ -1,261 +1,640 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="cyber-dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Assist AI - Intelligent Voice Assistant</title>
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Voice Assist AI - Next-Gen Conversational & Voice Assistant</title>
+    <meta name="description" content="Intelligent AI Chatbot and Voice Assistant powered by Java Spring Boot and Gemini AI with real-time speech, live weather, tasks, and system automation.">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- App Styles -->
+    <link rel="stylesheet" href="/css/styles.css?v=3">
 </head>
 <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="logo">
-                <i class="fas fa-microphone-alt"></i>
-                <span>Voice Assist AI</span>
-            </div>
-            <div class="nav-links">
-                <a href="#home" class="nav-link">Home</a>
-                <a href="#voice-chat" class="nav-link">Voice Chat</a>
-                <a href="#api-docs" class="nav-link">API Docs</a>
-                <a href="#status" class="nav-link">Status</a>
-            </div>
-        </div>
-    </nav>
+    <div class="app-container" id="app">
+        <!-- Background Ambient Glow Effects -->
+        <div class="ambient-glow glow-1"></div>
+        <div class="ambient-glow glow-2"></div>
+        <div class="ambient-glow glow-3"></div>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <h1 class="hero-title">Voice Assist AI</h1>
-            <p class="hero-subtitle">Intelligent Voice Assistant powered by Java & Spring Boot</p>
-            <div class="hero-features">
-                <div class="feature">
-                    <i class="fas fa-headphones"></i>
-                    <span>Real-time Voice</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-brain"></i>
-                    <span>AI Powered</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-bolt"></i>
-                    <span>Lightning Fast</span>
+        <!-- ==================== Header / Top Navigation ==================== -->
+        <header class="app-header">
+            <div class="header-left">
+                <button class="icon-btn sidebar-toggle-btn" id="sidebarToggleBtn" title="Toggle Sidebar (Ctrl+B)">
+                    <i class="fas fa-bars-staggered"></i>
+                </button>
+                <div class="brand-logo" onclick="startNewChat()">
+                    <div class="logo-orb">
+                        <i class="fas fa-brain"></i>
+                        <span class="logo-pulse"></span>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">VOICE ASSIST <span class="logo-badge">AI</span></span>
+                        <span class="logo-sub">JAVA 17 & SPRING BOOT 3</span>
+                    </div>
                 </div>
             </div>
-            <button class="btn btn-primary" onclick="scrollToSection('voice-chat')">
-                <i class="fas fa-play"></i> Get Started
-            </button>
-        </div>
-        <div class="hero-visual">
-            <div class="mic-animation">
-                <div class="pulse"></div>
-                <div class="pulse"></div>
-                <div class="pulse"></div>
-                <i class="fas fa-microphone-alt"></i>
-            </div>
-        </div>
-    </section>
 
-    <!-- Voice Chat Section -->
-    <section id="voice-chat" class="voice-chat-section">
-        <div class="container">
-            <h2>Voice Chat Interface</h2>
-            
-            <div class="chat-container">
-                <!-- Chat Messages -->
-                <div class="messages-panel">
-                    <div id="messages" class="messages">
-                        <div class="message system">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Welcome! Start a conversation using text or WebSocket connection.</span>
+            <div class="header-center">
+                <!-- Persona Dropdown Selector -->
+                <div class="persona-selector-container">
+                    <button class="persona-badge-btn" id="personaSelectBtn" title="Choose AI Persona">
+                        <span class="persona-avatar-icon" id="headerPersonaAvatar"><i class="fas fa-robot"></i></span>
+                        <div class="persona-info-compact">
+                            <span class="persona-name-text" id="headerPersonaName">Jarvis AI</span>
+                            <span class="persona-tag-text" id="headerPersonaTag">General</span>
+                        </div>
+                        <i class="fas fa-chevron-down chevron-icon"></i>
+                    </button>
+                    <div class="persona-dropdown-menu" id="personaDropdownMenu">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <!-- Live Voice Mode Button -->
+                <button class="header-btn voice-orb-mode-btn" id="openVoiceOrbBtn" title="Ambient Full-Screen Voice Mode">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span class="btn-text">Voice Orb</span>
+                </button>
+
+                <!-- Tasks Drawer Button -->
+                <button class="header-btn action-pill-btn" id="openTasksBtn" title="Tasks & Reminders">
+                    <i class="fas fa-list-check"></i>
+                    <span class="btn-text">Tasks</span>
+                    <span class="badge-count" id="taskCountBadge">0</span>
+                </button>
+
+                <!-- API Tester Modal Button -->
+                <button class="header-btn action-pill-btn" id="openApiTesterBtn" title="Developer API Playground">
+                    <i class="fas fa-terminal"></i>
+                    <span class="btn-text">API Tester</span>
+                </button>
+
+                <!-- Theme Switcher -->
+                <div class="theme-dropdown-container">
+                    <button class="icon-btn theme-btn" id="themeBtn" title="Switch Theme">
+                        <i class="fas fa-palette"></i>
+                    </button>
+                    <div class="theme-dropdown-menu" id="themeDropdownMenu">
+                        <button class="theme-opt active" data-theme-val="cyber-dark"><i class="fas fa-moon"></i> Cyber Dark</button>
+                        <button class="theme-opt" data-theme-val="midnight-oled"><i class="fas fa-adjust"></i> Midnight OLED</button>
+                        <button class="theme-opt" data-theme-val="neon-cyberpunk"><i class="fas fa-bolt"></i> Neon Cyber</button>
+                        <button class="theme-opt" data-theme-val="pure-light"><i class="fas fa-sun"></i> Pure Light</button>
+                    </div>
+                </div>
+
+                <!-- Settings Button -->
+                <button class="icon-btn settings-btn" id="openSettingsBtn" title="Settings (API Key & Voice)">
+                    <i class="fas fa-gear"></i>
+                </button>
+
+                <!-- WebSocket / Health Status Pill -->
+                <div class="ws-indicator-pill disconnected" id="wsIndicatorPill" title="Click to reconnect WebSocket" onclick="connectWebSocket(true)">
+                    <span class="ws-pulse-dot"></span>
+                    <span class="ws-status-label" id="wsStatusLabel">WS Offline</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- ==================== Main Application Workspace ==================== -->
+        <div class="app-workspace">
+            <!-- ==================== Left Sidebar ==================== -->
+            <aside class="app-sidebar" id="appSidebar">
+                <div class="sidebar-header">
+                    <button class="new-chat-btn" id="newChatBtn" onclick="startNewChat()">
+                        <i class="fas fa-plus"></i>
+                        <span>New Conversation</span>
+                        <kbd class="shortcut-key">Ctrl+N</kbd>
+                    </button>
+                </div>
+
+                <!-- Search Sessions -->
+                <div class="sidebar-search">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="sessionSearchInput" placeholder="Search conversations..." oninput="filterSessions(this.value)">
+                </div>
+
+                <!-- Sessions List -->
+                <div class="sessions-scroll-container">
+                    <div class="sessions-group-label">
+                        <span>Conversations</span>
+                        <span class="sessions-count" id="totalSessionsCount">0</span>
+                    </div>
+                    <div class="sessions-list" id="sessionsList">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+
+                <!-- Live System Telemetry Card -->
+                <div class="sidebar-footer-card">
+                    <div class="telemetry-header">
+                        <span class="telemetry-title"><i class="fas fa-heart-pulse"></i> System Engine</span>
+                        <span class="telemetry-ping" id="telemetryPing">--ms</span>
+                    </div>
+                    <div class="telemetry-body">
+                        <div class="telemetry-row">
+                            <span>AI Provider:</span>
+                            <span class="telemetry-val" id="telemetryModel">Gemini / Smart Rules</span>
+                        </div>
+                        <div class="telemetry-row">
+                            <span>JVM Uptime:</span>
+                            <span class="telemetry-val" id="telemetryUptime">--</span>
+                        </div>
+                        <div class="telemetry-row">
+                            <span>Memory:</span>
+                            <span class="telemetry-val" id="telemetryMemory">-- MB</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ==================== Main Chat & Voice Panel ==================== -->
+            <main class="chat-main-panel">
+                <!-- Chat Action Header -->
+                <div class="chat-header-bar">
+                    <div class="chat-session-info">
+                        <h2 class="active-session-title" id="currentSessionTitle">Welcome to Voice Assist AI</h2>
+                        <div class="session-meta-tags">
+                            <span class="session-persona-pill" id="currentPersonaPill">
+                                <i class="fas fa-robot"></i> Jarvis AI
+                            </span>
+                            <span class="ai-status-pill ready" id="aiStatusPill">
+                                <span class="status-ring"></span>
+                                <span id="aiStatusText">Ready</span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Audio Visualizer Canvas in Header -->
+                    <div class="header-visualizer-container" id="visualizerContainer">
+                        <canvas id="audioVisualizerCanvas" width="160" height="32"></canvas>
+                    </div>
+
+                    <div class="chat-header-actions">
+                        <button class="header-action-btn" id="ttsToggleBtn" title="Toggle AI Voice Speech (Auto-Speak)" onclick="toggleSpeechAudio()">
+                            <i class="fas fa-volume-high" id="ttsToggleIcon"></i>
+                            <span class="btn-tooltip-text">Voice Audio</span>
+                        </button>
+                        <button class="header-action-btn" id="exportChatBtn" title="Export Conversation as Markdown" onclick="exportCurrentChat()">
+                            <i class="fas fa-download"></i>
+                            <span class="btn-tooltip-text">Export</span>
+                        </button>
+                        <button class="header-action-btn" id="clearChatBtn" title="Clear Messages" onclick="clearCurrentChat()">
+                            <i class="fas fa-trash-can"></i>
+                            <span class="btn-tooltip-text">Clear</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Chat Messages Scroll View -->
+                <div class="chat-messages-container" id="chatMessagesContainer">
+                    <!-- Welcome Hero Card (Visible on empty chat) -->
+                    <div class="welcome-hero-card" id="welcomeHeroCard">
+                        <div class="hero-core-orb">
+                            <div class="orb-ring ring-1"></div>
+                            <div class="orb-ring ring-2"></div>
+                            <div class="orb-ring ring-3"></div>
+                            <div class="orb-center">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                        </div>
+                        <h1 class="hero-main-title">How can I help you today?</h1>
+                        <p class="hero-main-desc">
+                            Experience intelligent voice and chat conversation. Powered by Java 17, Spring Boot WebSocket, and Gemini AI.
+                        </p>
+
+                        <!-- Curated Prompt Suggestion Cards -->
+                        <div class="quick-prompt-grid" id="quickPromptGrid">
+                            <button class="prompt-chip-card" onclick="sendSuggestedPrompt('What is the weather in Tokyo?')">
+                                <div class="chip-icon"><i class="fas fa-cloud-sun"></i></div>
+                                <div class="chip-content">
+                                    <span class="chip-title">Live Weather</span>
+                                    <span class="chip-sub">"Weather in Tokyo"</span>
+                                </div>
+                            </button>
+
+                            <button class="prompt-chip-card" onclick="sendSuggestedPrompt('Explain Java 21 Virtual Threads and Record Patterns with code')">
+                                <div class="chip-icon"><i class="fab fa-java"></i></div>
+                                <div class="chip-content">
+                                    <span class="chip-title">Java 21 Architecture</span>
+                                    <span class="chip-sub">"Explain Virtual Threads with code"</span>
+                                </div>
+                            </button>
+
+                            <button class="prompt-chip-card" onclick="sendSuggestedPrompt('Calculate (5000 * (1 + 0.07)^5)')">
+                                <div class="chip-icon"><i class="fas fa-calculator"></i></div>
+                                <div class="chip-content">
+                                    <span class="chip-title">Smart Calculator</span>
+                                    <span class="chip-sub">"Compound interest on $5,000"</span>
+                                </div>
+                            </button>
+
+                            <button class="prompt-chip-card" onclick="sendSuggestedPrompt('Add task: Test AI Voice Assistant Speech features')">
+                                <div class="chip-icon"><i class="fas fa-tasks"></i></div>
+                                <div class="chip-content">
+                                    <span class="chip-title">Task Manager</span>
+                                    <span class="chip-sub">"Add task: Test Voice features"</span>
+                                </div>
+                            </button>
+
+                            <button class="prompt-chip-card" onclick="sendSuggestedPrompt('Open YouTube')">
+                                <div class="chip-icon"><i class="fab fa-youtube"></i></div>
+                                <div class="chip-content">
+                                    <span class="chip-title">App Shortcut</span>
+                                    <span class="chip-sub">"Open YouTube"</span>
+                                </div>
+                            </button>
+
+                            <button class="prompt-chip-card" onclick="sendSuggestedPrompt('Tell me a funny programming joke')">
+                                <div class="chip-icon"><i class="fas fa-laugh-beam"></i></div>
+                                <div class="chip-content">
+                                    <span class="chip-title">Fun & Trivia</span>
+                                    <span class="chip-sub">"Tell me a programming joke"</span>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Chat Messages List -->
+                    <div class="messages-stream" id="messagesStream">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+
+                    <!-- AI Thinking Indicator -->
+                    <div class="thinking-bubble" id="thinkingBubble" style="display: none;">
+                        <div class="thinking-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="thinking-dots">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <span class="thinking-label">AI is thinking...</span>
+                    </div>
+                </div>
+
+                <!-- ==================== Bottom Input Console ==================== -->
+                <div class="chat-input-dock">
+                    <!-- Live Speech Recognition Transcript Preview Bar -->
+                    <div class="stt-live-preview" id="sttLivePreview" style="display: none;">
+                        <div class="stt-live-indicator">
+                            <span class="stt-pulse-dot"></span>
+                            <span>Listening:</span>
+                        </div>
+                        <span class="stt-transcript-text" id="sttTranscriptText">Say something...</span>
+                        <button class="stt-cancel-btn" onclick="stopSpeechRecognition()" title="Stop Listening">
+                            <i class="fas fa-xmark"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Suggestions Carousel Chips -->
+                    <div class="quick-chips-carousel" id="quickChipsCarousel">
+                        <button class="quick-chip" onclick="sendSuggestedPrompt('What is the weather in London?')">🌦️ London Weather</button>
+                        <button class="quick-chip" onclick="sendSuggestedPrompt('What time is it in New York?')">⏰ Time in NYC</button>
+                        <button class="quick-chip" onclick="sendSuggestedPrompt('Convert 100 km to miles')">📐 100 km to miles</button>
+                        <button class="quick-chip" onclick="sendSuggestedPrompt('Show my tasks')">📋 Show my tasks</button>
+                        <button class="quick-chip" onclick="sendSuggestedPrompt('Open Spotify')">🎵 Open Spotify</button>
+                        <button class="quick-chip" onclick="sendSuggestedPrompt('Inspire me with a quote')">✨ Daily Quote</button>
+                    </div>
+
+                    <!-- Modern Glass Input Form -->
+                    <div class="input-form-container">
+                        <div class="input-actions-left">
+                            <button class="input-tool-btn" id="clearInputBtn" title="Clear input text" onclick="clearInputField()">
+                                <i class="fas fa-eraser"></i>
+                            </button>
+                        </div>
+
+                        <!-- Auto-growing Textarea -->
+                        <textarea
+                            id="chatInput"
+                            class="chat-textarea"
+                            placeholder="Type a message, ask a question, or press the mic..."
+                            rows="1"
+                            onkeydown="handleInputKeyDown(event)"
+                            oninput="autoResizeInput(this)"
+                        ></textarea>
+
+                        <!-- Voice Mic Button (Centerpiece) -->
+                        <button class="voice-mic-btn" id="voiceMicBtn" title="Click to Speak (Space or Click)" onclick="toggleVoiceInput()">
+                            <div class="mic-ripple ring-1"></div>
+                            <div class="mic-ripple ring-2"></div>
+                            <i class="fas fa-microphone" id="voiceMicIcon"></i>
+                        </button>
+
+                        <!-- Send Button -->
+                        <button class="send-message-btn" id="sendMessageBtn" title="Send Message (Enter)" onclick="submitTextMessage()">
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                    </div>
+
+                    <div class="input-dock-footer">
+                        <span class="footer-hint">Press <kbd>Enter ↵</kbd> to send, <kbd>Shift+Enter</kbd> for newline • <i class="fas fa-microphone"></i> Click mic for voice chat</span>
+                        <span class="footer-meta" id="charCountMeta">0 chars</span>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- ==================== Fullscreen "Orb Voice Mode" Overlay ==================== -->
+        <div class="voice-orb-modal" id="voiceOrbModal" style="display: none;">
+            <div class="orb-modal-header">
+                <div class="orb-modal-brand">
+                    <i class="fas fa-satellite-dish"></i>
+                    <span>AMBIENT VOICE MODE</span>
+                </div>
+                <button class="icon-btn orb-close-btn" onclick="closeVoiceOrbMode()" title="Exit Voice Mode">
+                    <i class="fas fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="orb-modal-content">
+                <!-- 3D Fluid Plasma Canvas Orb -->
+                <div class="plasma-orb-wrapper">
+                    <canvas id="plasmaOrbCanvas" width="340" height="340"></canvas>
+                </div>
+
+                <div class="orb-status-text" id="orbStatusText">Tap the microphone or say "Hello"</div>
+                <div class="orb-subtitles-box" id="orbSubtitlesBox">
+                    <p id="orbSubtitleTranscript">Listening to your voice...</p>
+                </div>
+
+                <!-- Big Interactive Center Mic -->
+                <button class="orb-big-mic-btn" id="orbBigMicBtn" onclick="toggleVoiceInput()">
+                    <i class="fas fa-microphone" id="orbBigMicIcon"></i>
+                </button>
+
+                <div class="orb-footer-controls">
+                    <button class="orb-control-pill" onclick="sendSuggestedPrompt('What is the weather today?')">
+                        <i class="fas fa-cloud-sun"></i> Weather
+                    </button>
+                    <button class="orb-control-pill" onclick="sendSuggestedPrompt('Tell me a joke')">
+                        <i class="fas fa-laugh"></i> Joke
+                    </button>
+                    <button class="orb-control-pill" onclick="sendSuggestedPrompt('Show my tasks')">
+                        <i class="fas fa-tasks"></i> Tasks
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Settings Modal ==================== -->
+        <div class="app-modal-backdrop" id="settingsModal" style="display: none;">
+            <div class="app-modal-card">
+                <div class="modal-card-header">
+                    <div class="modal-title">
+                        <i class="fas fa-sliders"></i>
+                        <span>AI Assistant Settings</span>
+                    </div>
+                    <button class="icon-btn modal-close-btn" onclick="closeSettingsModal()">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal-card-body">
+                    <!-- Gemini API Key Configuration -->
+                    <div class="settings-section">
+                        <h3 class="section-title"><i class="fab fa-google"></i> Gemini AI Configuration</h3>
+                        <p class="section-desc">Add your Gemini API Key to enable unlimited multi-turn AI reasoning across all topics.</p>
+                        
+                        <div class="form-group">
+                            <label for="geminiApiKeyInput">Gemini API Key</label>
+                            <div class="input-with-btn">
+                                <input type="password" id="geminiApiKeyInput" placeholder="Enter your Gemini API key (AIzaSy...)" autocomplete="off">
+                                <button class="btn-secondary" onclick="toggleApiKeyVisibility()">
+                                    <i class="fas fa-eye" id="apiKeyVisibilityIcon"></i>
+                                </button>
+                                <button class="btn-primary-sm" onclick="saveGeminiApiKey()">
+                                    Save Key
+                                </button>
+                            </div>
+                            <span class="form-help-text">Your API key is securely stored in your browser's local storage only. Get a free key from <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener">Google AI Studio</a>.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="geminiModelSelect">AI Model Selection</label>
+                            <select id="geminiModelSelect" onchange="saveGeminiModel(this.value)">
+                                <option value="gemini-1.5-flash">Gemini 1.5 Flash (Super Fast & Concise)</option>
+                                <option value="gemini-1.5-pro">Gemini 1.5 Pro (Deep Reasoning & Analysis)</option>
+                                <option value="gemini-2.0-flash">Gemini 2.0 Flash (Next-Gen High Speed)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Voice Synthesis (TTS) Settings -->
+                    <div class="settings-section">
+                        <h3 class="section-title"><i class="fas fa-volume-high"></i> Voice & Speech Synthesis</h3>
+                        
+                        <div class="form-group">
+                            <label for="voiceSelect">Assistant Voice</label>
+                            <select id="voiceSelect" onchange="saveVoicePreference(this.value)">
+                                <option value="">Loading system voices...</option>
+                            </select>
+                        </div>
+
+                        <div class="sliders-grid">
+                            <div class="slider-group">
+                                <div class="slider-label-row">
+                                    <span>Speed / Rate</span>
+                                    <span id="rateValLabel">1.0x</span>
+                                </div>
+                                <input type="range" id="voiceRateSlider" min="0.5" max="2" step="0.1" value="1.0" oninput="updateRateLabel(this.value)">
+                            </div>
+
+                            <div class="slider-group">
+                                <div class="slider-label-row">
+                                    <span>Pitch</span>
+                                    <span id="pitchValLabel">1.0</span>
+                                </div>
+                                <input type="range" id="voicePitchSlider" min="0.5" max="1.5" step="0.1" value="1.0" oninput="updatePitchLabel(this.value)">
+                            </div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="autoSpeakToggle" checked onchange="saveAutoSpeakPref(this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="toggle-text">
+                                <span class="toggle-title">Auto-Speak Voice Responses</span>
+                                <span class="toggle-sub">Read assistant replies aloud automatically</span>
+                            </div>
+                        </div>
+
+                        <div class="toggle-row">
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="soundFxToggle" checked onchange="saveSoundFxPref(this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="toggle-text">
+                                <span class="toggle-title">Audio Feedback Effects</span>
+                                <span class="toggle-sub">Play futuristic UI chimes on message send/receive</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-secondary-sm" onclick="testVoiceSpeech()">
+                            <i class="fas fa-play"></i> Test Voice Sample
+                        </button>
+                    </div>
+
+                    <!-- Speech Recognition (STT) Settings -->
+                    <div class="settings-section">
+                        <h3 class="section-title"><i class="fas fa-microphone-lines"></i> Speech Recognition (STT)</h3>
+                        <div class="form-group">
+                            <label for="sttLangSelect">Recognition Language</label>
+                            <select id="sttLangSelect" onchange="saveSttLanguage(this.value)">
+                                <option value="en-US">English (United States)</option>
+                                <option value="en-GB">English (United Kingdom)</option>
+                                <option value="en-IN">English (India)</option>
+                                <option value="es-ES">Spanish (Spain)</option>
+                                <option value="fr-FR">French (France)</option>
+                                <option value="de-DE">German (Germany)</option>
+                                <option value="ja-JP">Japanese (Japan)</option>
+                                <option value="hi-IN">Hindi (India)</option>
+                            </select>
                         </div>
                     </div>
                 </div>
 
-                <!-- Input Controls -->
-                <div class="controls-panel">
-                    <!-- Text Input -->
-                    <div class="input-group">
-                        <input 
-                            type="text" 
-                            id="textInput" 
-                            class="text-input" 
-                            placeholder="Type your message or choose an option below..."
-                            onkeypress="handleKeyPress(event)"
-                        >
-                        <button class="btn-icon send-btn" onclick="sendTextMessage()" title="Send Message">
-                            <i class="fas fa-paper-plane"></i>
+                <div class="modal-card-footer">
+                    <button class="btn-secondary" onclick="closeSettingsModal()">Close</button>
+                    <button class="btn-primary" onclick="saveAllSettingsAndClose()">Apply & Save</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== Tasks & Reminders Drawer / Modal ==================== -->
+        <div class="app-modal-backdrop" id="tasksModal" style="display: none;">
+            <div class="app-modal-card tasks-modal-card">
+                <div class="modal-card-header">
+                    <div class="modal-title">
+                        <i class="fas fa-list-check"></i>
+                        <span>Tasks & Reminders</span>
+                    </div>
+                    <button class="icon-btn modal-close-btn" onclick="closeTasksModal()">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal-card-body">
+                    <!-- Task Input Form -->
+                    <div class="task-add-bar">
+                        <input type="text" id="newTaskInput" placeholder="Add a new task or reminder..." onkeypress="handleTaskInputKeyPress(event)">
+                        <select id="taskPrioritySelect">
+                            <option value="medium">Medium</option>
+                            <option value="high">High ⚡</option>
+                            <option value="low">Low</option>
+                        </select>
+                        <button class="btn-primary" onclick="addNewTaskFromInput()">
+                            <i class="fas fa-plus"></i> Add
                         </button>
                     </div>
 
-                    <!-- Quick Actions -->
-                    <div class="quick-actions">
-                        <button class="btn-action" onclick="sendQuickMessage('Hello, Voice Assist!')">
-                            <i class="fas fa-handshake"></i> Hello
-                        </button>
-                        <button class="btn-action" onclick="sendQuickMessage('What is the weather today?')">
-                            <i class="fas fa-cloud-sun"></i> Weather
-                        </button>
-                        <button class="btn-action" onclick="sendQuickMessage('Turn on the lights')">
-                            <i class="fas fa-lightbulb"></i> Lights
-                        </button>
-                        <button class="btn-action" onclick="sendQuickMessage('Help me with tasks')">
-                            <i class="fas fa-tasks"></i> Tasks
+                    <div class="tasks-filter-bar">
+                        <span class="tasks-status-text" id="tasksRemainingText">0 tasks remaining</span>
+                        <button class="btn-danger-sm" onclick="clearAllTasksCurrentSession()" title="Clear all tasks">
+                            <i class="fas fa-trash-can"></i> Clear All
                         </button>
                     </div>
 
-                    <!-- Connection Status -->
-                    <div class="connection-status">
-                        <div id="wsStatus" class="status-badge disconnected">
-                            <span class="status-dot"></span>
-                            <span id="wsStatusText">WebSocket Disconnected</span>
+                    <!-- Tasks List -->
+                    <div class="tasks-scroll-list" id="tasksListContainer">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== API Documentation & Playground Modal ==================== -->
+        <div class="app-modal-backdrop" id="apiTesterModal" style="display: none;">
+            <div class="app-modal-card api-tester-modal-card">
+                <div class="modal-card-header">
+                    <div class="modal-title">
+                        <i class="fas fa-terminal"></i>
+                        <span>Developer API Playground</span>
+                    </div>
+                    <button class="icon-btn modal-close-btn" onclick="closeApiTesterModal()">
+                        <i class="fas fa-xmark"></i>
+                    </button>
+                </div>
+
+                <div class="modal-card-body">
+                    <div class="api-tester-grid">
+                        <div class="api-endpoints-sidebar">
+                            <div class="endpoint-card active" onclick="selectApiEndpoint(this, 'health')">
+                                <span class="http-badge get">GET</span>
+                                <span class="endpoint-path">/api/v1/health</span>
+                            </div>
+                            <div class="endpoint-card" onclick="selectApiEndpoint(this, 'status')">
+                                <span class="http-badge get">GET</span>
+                                <span class="endpoint-path">/api/v1/status</span>
+                            </div>
+                            <div class="endpoint-card" onclick="selectApiEndpoint(this, 'personas')">
+                                <span class="http-badge get">GET</span>
+                                <span class="endpoint-path">/api/v1/chat/personas</span>
+                            </div>
+                            <div class="endpoint-card" onclick="selectApiEndpoint(this, 'sessions')">
+                                <span class="http-badge get">GET</span>
+                                <span class="endpoint-path">/api/v1/chat/sessions</span>
+                            </div>
+                            <div class="endpoint-card" onclick="selectApiEndpoint(this, 'chat')">
+                                <span class="http-badge post">POST</span>
+                                <span class="endpoint-path">/api/v1/chat/message</span>
+                            </div>
+                            <div class="endpoint-card" onclick="selectApiEndpoint(this, 'voice')">
+                                <span class="http-badge post">POST</span>
+                                <span class="endpoint-path">/api/v1/voice/process</span>
+                            </div>
+                            <div class="endpoint-card" onclick="selectApiEndpoint(this, 'tasks')">
+                                <span class="http-badge get">GET</span>
+                                <span class="endpoint-path">/api/v1/tasks/{sessionId}</span>
+                            </div>
                         </div>
-                        <button class="btn-icon" onclick="connectWebSocket()" title="Connect WebSocket">
-                            <i class="fas fa-plug"></i> Connect
-                        </button>
+
+                        <div class="api-execution-pane">
+                            <div class="api-pane-header">
+                                <div class="endpoint-url-bar">
+                                    <span class="http-method-tag" id="currentApiMethod">GET</span>
+                                    <input type="text" id="currentApiUrl" value="/api/v1/health" readonly>
+                                </div>
+                                <button class="btn-primary" id="executeApiBtn" onclick="executeSelectedApi()">
+                                    <i class="fas fa-paper-plane"></i> Execute
+                                </button>
+                            </div>
+
+                            <div class="api-payload-section" id="apiPayloadSection" style="display: none;">
+                                <label>Request JSON Body:</label>
+                                <textarea id="apiPayloadTextarea" rows="4"></textarea>
+                            </div>
+
+                            <div class="api-response-section">
+                                <div class="response-header-row">
+                                    <span>Response JSON:</span>
+                                    <span class="response-time-badge" id="apiResponseTimeBadge">0 ms</span>
+                                </div>
+                                <pre id="apiJsonViewer" class="json-code-viewer">Click Execute to test endpoint...</pre>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <!-- API Documentation Section -->
-    <section id="api-docs" class="api-docs-section">
-        <div class="container">
-            <h2>API Documentation</h2>
-            
-            <div class="api-grid">
-                <!-- Health Endpoint -->
-                <div class="api-card">
-                    <div class="api-header">
-                        <span class="method get">GET</span>
-                        <span class="endpoint">/api/v1/health</span>
-                    </div>
-                    <p>Check application health status</p>
-                    <button class="btn-small" onclick="testEndpoint('/api/v1/health', 'GET')">
-                        Test
-                    </button>
-                </div>
+        <!-- Toast Notifications -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
 
-                <!-- Status Endpoint -->
-                <div class="api-card">
-                    <div class="api-header">
-                        <span class="method get">GET</span>
-                        <span class="endpoint">/api/v1/status</span>
-                    </div>
-                    <p>Get application operational status</p>
-                    <button class="btn-small" onclick="testEndpoint('/api/v1/status', 'GET')">
-                        Test
-                    </button>
-                </div>
-
-                <!-- Voice Process Endpoint -->
-                <div class="api-card">
-                    <div class="api-header">
-                        <span class="method post">POST</span>
-                        <span class="endpoint">/api/v1/voice/process</span>
-                    </div>
-                    <p>Process voice input (text, audio, or command)</p>
-                    <button class="btn-small" onclick="testVoiceEndpoint()">
-                        Test
-                    </button>
-                </div>
-
-                <!-- Voice Recognize Endpoint -->
-                <div class="api-card">
-                    <div class="api-header">
-                        <span class="method post">POST</span>
-                        <span class="endpoint">/api/v1/voice/recognize</span>
-                    </div>
-                    <p>Recognize speech from audio input</p>
-                    <button class="btn-small" onclick="testRecognizeEndpoint()">
-                        Test
-                    </button>
-                </div>
-            </div>
-
-            <!-- Response Display -->
-            <div class="response-display">
-                <h3>API Response</h3>
-                <pre id="apiResponse" class="response-box">Response will appear here...</pre>
-            </div>
-        </div>
-    </section>
-
-    <!-- Status Dashboard Section -->
-    <section id="status" class="status-section">
-        <div class="container">
-            <h2>System Status</h2>
-            
-            <div class="status-grid">
-                <!-- Server Status -->
-                <div class="status-card">
-                    <div class="status-icon success">
-                        <i class="fas fa-server"></i>
-                    </div>
-                    <h3>Server</h3>
-                    <p id="serverStatus">Running on port 8080</p>
-                </div>
-
-                <!-- Database Status -->
-                <div class="status-card">
-                    <div class="status-icon success">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <h3>Database</h3>
-                    <p>Connected</p>
-                </div>
-
-                <!-- WebSocket Status -->
-                <div class="status-card">
-                    <div class="status-icon" id="wsStatusIcon">
-                        <i class="fas fa-wifi"></i>
-                    </div>
-                    <h3>WebSocket</h3>
-                    <p id="wsStatusDetail">Disconnected</p>
-                </div>
-
-                <!-- API Status -->
-                <div class="status-card">
-                    <div class="status-icon success">
-                        <i class="fas fa-plug"></i>
-                    </div>
-                    <h3>API</h3>
-                    <p>Operational</p>
-                </div>
-            </div>
-
-            <!-- Real-time Stats -->
-            <div class="stats-container">
-                <div class="stat">
-                    <span class="stat-label">Messages Sent</span>
-                    <span class="stat-value" id="messageCount">0</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Session Time</span>
-                    <span class="stat-value" id="sessionTime">00:00</span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">Response Time</span>
-                    <span class="stat-value" id="responseTime">--ms</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <p>&copy; 2026 Voice Assist AI. All rights reserved.</p>
-            <div class="footer-links">
-                <a href="#" target="_blank">GitHub</a>
-                <a href="#" target="_blank">Documentation</a>
-                <a href="#" target="_blank">Support</a>
-            </div>
-        </div>
-    </footer>
-
-    <script src="/js/app.js?v=2"></script>
+    <!-- Scripts -->
+    <script src="/js/app.js?v=3"></script>
 </body>
 </html>

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import com.voiceassist.ai.model.VoiceMessage;
 import com.voiceassist.ai.model.VoiceResponse;
 import com.voiceassist.ai.service.VoiceProcessingService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,13 +14,16 @@ import org.slf4j.LoggerFactory;
  */
 @RestController
 @RequestMapping("/api/v1/voice")
+@CrossOrigin(origins = "*")
 public class VoiceController {
 
     private static final Logger logger = LoggerFactory.getLogger(VoiceController.class);
     private final VoiceProcessingService voiceProcessingService;
+    private final ObjectMapper objectMapper;
 
     public VoiceController(VoiceProcessingService voiceProcessingService) {
         this.voiceProcessingService = voiceProcessingService;
+        this.objectMapper = new ObjectMapper();
     }
 
     /**
@@ -31,14 +35,12 @@ public class VoiceController {
 
         try {
             String response = voiceProcessingService.processVoice(voiceMessage);
-            // Parse response back to object
-            return new com.fasterxml.jackson.databind.ObjectMapper()
-                    .readValue(response, VoiceResponse.class);
+            return objectMapper.readValue(response, VoiceResponse.class);
         } catch (Exception e) {
             logger.error("Error processing voice", e);
             return VoiceResponse.builder()
                     .status("error")
-                    .message("Failed to process voice")
+                    .message("Failed to process voice: " + e.getMessage())
                     .timestamp(System.currentTimeMillis())
                     .build();
         }
@@ -52,7 +54,7 @@ public class VoiceController {
         logger.info("Speech recognition request");
 
         VoiceMessage textMessage = VoiceMessage.builder()
-                .type("text")
+                .type("audio")
                 .content(audioMessage.getContent())
                 .language(audioMessage.getLanguage())
                 .sessionId(audioMessage.getSessionId())
@@ -60,8 +62,7 @@ public class VoiceController {
 
         try {
             String response = voiceProcessingService.processVoice(textMessage);
-            return new com.fasterxml.jackson.databind.ObjectMapper()
-                    .readValue(response, VoiceResponse.class);
+            return objectMapper.readValue(response, VoiceResponse.class);
         } catch (Exception e) {
             logger.error("Error recognizing speech", e);
             return VoiceResponse.builder()

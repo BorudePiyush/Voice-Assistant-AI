@@ -1,6 +1,6 @@
 # Voice Assist AI
 
-A comprehensive Voice Assistant application built with **Java 21**, **Spring Boot 3.2+**, and real-time WebSocket communication.
+A comprehensive Voice Assistant application built with **Java 25**, **Spring Boot 3.2+**, and real-time WebSocket communication.
 
 ## Features
 
@@ -46,7 +46,7 @@ voice-assist-ai/
 
 | Component | Technology | Version |
 |-----------|-----------|---------|
-| Language | Java | 21 (LTS) |
+| Language | Java | 25 (LTS) |
 | Framework | Spring Boot | 3.2.0+ |
 | Build Tool | Maven | 3.8+ |
 | Real-time Comm | WebSocket | Native Spring |
@@ -56,7 +56,7 @@ voice-assist-ai/
 
 ## Prerequisites
 
-- **Java 21 LTS** or higher
+- **Java 25 LTS** or higher
 - **Maven 3.8** or higher
 - **IDE** (VS Code, IntelliJ IDEA, Eclipse)
 - **Git** (for version control)
@@ -304,7 +304,7 @@ mvn install
 
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
 - [WebSocket Tutorial](https://spring.io/guides/gs/messaging-stomp-websocket/)
-- [Java 21 Features](https://www.oracle.com/java/21/)
+- [Java 25 Features](https://www.oracle.com/java/25/)
 
 ## License
 
