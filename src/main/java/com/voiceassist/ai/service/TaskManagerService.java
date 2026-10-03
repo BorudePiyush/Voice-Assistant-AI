@@ -115,7 +115,10 @@ public class TaskManagerService {
         }
 
         // Check if listing tasks
-        if (normalized.equals("my tasks") || normalized.equals("show tasks") || normalized.equals("list tasks") || normalized.contains("what are my tasks") || normalized.contains("show my todo")) {
+        if (normalized.contains("my task") || normalized.contains("show task") || normalized.contains("list task") 
+                || normalized.contains("what are my tasks") || normalized.contains("show my todo") 
+                || normalized.contains("view task") || normalized.contains("get task")
+                || normalized.equals("tasks") || normalized.equals("todo")) {
             List<TaskItem> tasks = getTasks(sessionId);
             if (tasks.isEmpty()) {
                 return new TaskActionResult(
@@ -135,7 +138,7 @@ public class TaskManagerService {
         }
 
         // Check if clearing tasks
-        if (normalized.contains("clear all tasks") || normalized.contains("delete all tasks")) {
+        if (normalized.contains("clear all tasks") || normalized.contains("delete all tasks") || normalized.contains("clear tasks") || normalized.contains("delete tasks")) {
             clearTasks(sessionId);
             return new TaskActionResult("🗑️ All tasks have been cleared.", "task-cleared", Map.of("tasks", Collections.emptyList()));
         }
